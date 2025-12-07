@@ -1,9 +1,15 @@
-version: '3.8'
 services:
-  notification-app:
+  java-finflow-notification-service:
     build: .
-    container_name: java-notification-app
-    ports:
-      - "9004:9004"
+    ports: ["9004:9004"]
     environment:
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=localhost:19092
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:9092
+      SPRING_KAFKA_CONSUMER_GROUP-ID: notification-service-group
+    networks:
+      - finflow-shared
+    restart: on-failure:5
+
+networks:
+  finflow-shared:
+    external: true
+    name: finflow-java-shared
